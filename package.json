@@ -4,7 +4,9 @@
   "description": "a social network web application where users can share their thoughts, react to friends' thoughts, and create a friend list.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node dist/server.js",
+    "dev": "ts-node src/server.ts", 
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

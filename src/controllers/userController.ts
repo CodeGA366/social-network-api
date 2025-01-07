@@ -13,11 +13,12 @@ export const getAllUsers = async (req: Request, res: Response) => {
 };
 
 //get a single user by id
-export const getUserById = async (req: Request, res: Response) => {
+export const getUserById = async (req: Request, res: Response): Promise<void> => {
     try {
         const user = await User.findById(req.params.userId).populate('thoughts').populate('friends');
         if (!user) {
-            return res.status(404).json({ message: 'No user found with this id!' });
+            res.status(404).json({ message: 'No user found with this id!' });
+            return;
         }
         res.status(200).json(user);
     } catch (err) {
@@ -36,11 +37,12 @@ export const createUser = async (req: Request, res: Response) => {
 };
 
 //update a user by id
-export const updateUser = async (req: Request, res: Response) => {
+export const updateUser = async (req: Request, res: Response): Promise<void> => {
     try {
         const user = await User.findByIdAndUpdate(req.params.userId, req.body, { new: true });
         if (!user) {
-            return res.status(404).json({ message: 'No user found with this id!' });
+            res.status(404).json({ message: 'No user found with this id!' });
+            return;
         }
         res.status(200).json(user);
     } catch (err) {
@@ -49,11 +51,12 @@ export const updateUser = async (req: Request, res: Response) => {
 };
 
 //delete a user by id
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response): Promise<void> => {
     try {
         const user = await User.findByIdAndDelete(req.params.userId);
         if (!user) {
-            return res.status(404).json({ message: 'No user found with this id!' });
+            res.status(404).json({ message: 'No user found with this id!' });
+            return;
         }
     } catch (err) {
         res.status(500).json(err);
@@ -61,12 +64,13 @@ export const deleteUser = async (req: Request, res: Response) => {
 };
 
 //Add a friend
-export const addFriend = async (req: Request, res: Response) => {
+export const addFriend = async (req: Request, res: Response): Promise<void> => {
     try {
         const user = await User.findByIdAndUpdate(req.params.userId, {$addToSet: {friends: req.params.friendId} }, { new: true }
         );
         if (!user) {
-            return res.status(404).json({ message: 'No user found with this id!' });
+            res.status(404).json({ message: 'No user found with this id!' });
+            return;
         }
         res.status(200).json(user);
     } catch (err) {
@@ -75,7 +79,7 @@ export const addFriend = async (req: Request, res: Response) => {
 };
 
 //Remove a friend
-export const removeFriend = async (req: Request, res: Response) => {
+export const removeFriend = async (req: Request, res: Response): Promise<void> => {
     try {
         const user = await User.findByIdAndUpdate(
             req.params.userId,
@@ -83,7 +87,8 @@ export const removeFriend = async (req: Request, res: Response) => {
             { new: true }
         );
         if (!user) {
-            return res.status(404).json({ message: 'No user found with this id!' });
+            res.status(404).json({ message: 'No user found with this id!' });
+            return;
         }
         res.status(200).json(user);
     } catch (err) {
