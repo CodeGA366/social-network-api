@@ -17,14 +17,17 @@ router.route('/')
     .post(createThought);
 
 // /api/thoughts/:id
-router.route('/:id')
+router.route('/:userId')
     .get(getThoughtById)
     .put(updateThought)
     .delete(deleteThought);
 
 // /api/thoughts/:thoughtId/reactions
-router.route('/:thoughtId/reactions')
+router.route('/:userId/reactions')
     .post(addReaction)
-    .delete(removeReaction);
+
+// /api/thoughts/:thoughtId/reactions/:reactionId
+router.route('/:userId/reactions/:reactionId')
+    .delete(removeReaction)
 
 export default router;

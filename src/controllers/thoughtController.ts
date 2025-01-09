@@ -16,7 +16,7 @@ export const getAllThoughts = async (req: Request, res: Response) => {
 //get a single thought by id
 export const getThoughtById = async (req: Request, res: Response): Promise<void> => {
     try {
-        const thought = await Thought.findById(req.params.thoughtId);
+        const thought = await Thought.findById(req.params.userId);
         if (!thought) {
             res.status(404).json({ message: 'No thought found with this id!' });
             return;
@@ -41,7 +41,7 @@ export const createThought = async (req: Request, res: Response) => {
 //update a thought by id
 export const updateThought = async (req: Request, res: Response): Promise<void> => {
     try {
-        const updatedThought = await Thought.findByIdAndUpdate(req.params.thoughtId, req.body, { new: true });
+        const updatedThought = await Thought.findByIdAndUpdate(req.params.userId, req.body, { new: true });
         if (!updatedThought) {
             res.status(404).json({ message: 'No thought found with this id!' });
         }
@@ -54,12 +54,12 @@ export const updateThought = async (req: Request, res: Response): Promise<void> 
 //delete a thought by id
 export const deleteThought = async (req: Request, res: Response): Promise<void> => {
     try {
-        const deletedThought = await Thought.findByIdAndDelete(req.params.thoughtId);
+        const deletedThought = await Thought.findByIdAndDelete(req.params.userId);
         if (!deletedThought) {
             res.status(404).json({ message: 'No thought found with this id!' });
             return;
         }
-        await User.findByIdAndUpdate(req.body.userId, { $pull: { thoughts: req.params.thoughtId } });
+        await User.findByIdAndUpdate(req.body.userId, { $pull: { thoughts: req.params.userId } });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -68,7 +68,7 @@ export const deleteThought = async (req: Request, res: Response): Promise<void> 
 // Add a reaction to a thought
 export const addReaction = async (req: Request, res: Response): Promise<void> => {
     try {
-        const thought = await Thought.findById(req.params.thoughtId);
+        const thought = await Thought.findById(req.params.userId);
         if (!thought) {
             res.status(404).json({ message: 'Thought not found' });
             return;
@@ -87,14 +87,14 @@ export const addReaction = async (req: Request, res: Response): Promise<void> =>
 // Remove a reaction from a thought
 export const removeReaction = async (req: Request, res: Response): Promise<void> => {
     try {
-        const thought = await Thought.findById(req.params.thoughtId);
+        const thought = await Thought.findById(req.params.userId); // Use thoughtId instead of userId
         if (!thought) {
-            res.status(404).json({ message: 'Thought not found' })
+            res.status(404).json({ message: 'Thought not found' });
             return;
         }
 
         // Filter out the reaction to be removed
-        thought.reactions.pull({ reactionId: req.params.reactionId });
+        thought.reactions.pull({ _id: req.params.reactionId }); // Use _id to match the reaction
         await thought.save();
 
         res.status(200).json(thought);

@@ -18,13 +18,13 @@ router.route('/')
     .post(createUser);
 
 // /api/users/:id
-router.route('/:id')
+router.route('/:userId')
     .get(getUserById)
     .put(updateUser)
     .delete(deleteUser);
 
 // /api/users/:id/friends/:friendId
-router.route('/:id/friends/:friendId')
+router.route('/:userId/friends/:friendId')
     .post(addFriend)
     .delete(removeFriend);
 
